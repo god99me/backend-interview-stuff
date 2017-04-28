@@ -1,5 +1,5 @@
 ## JDK源码：基础知识
-##### String  
+### String  
 1. `String` 中维护了一个字符数组 `private final char value[];`
 2. 操作都会产生一个深拷贝副本
 3. `intern` 可以将字符串移到字符串常量池中  
@@ -86,7 +86,7 @@
 	- `String repeated = StringUtils.repeat(str, 3);`
 	- `int count = StringUtils.countMatched("11221", "1");`
 
-##### StringBuffer
+### StringBuffer
 1. 默认长度为16  
 2. 几乎所有方法(除了构造方法，和一部分读方法)被 Synchronized 修饰，一部分读方法没有加 `synchronized` 是因为调用了其他被 `synchronized` 修饰的同名方法，`readObject` 串行化未加 `synchroinzed` 不知道原因？
 3. extends AbstractStringBuilder
@@ -109,13 +109,13 @@
 	}
 	```
 
-##### StringBuilder
+### StringBuilder
 1. 扩容大概为两倍 `int newCapacity = value.length * 2 + 2;`
 2. 默认长度为16
 3. 线程不安全
 4. JVM 优化问题
 
-##### Arrays & Collections
+### Arrays & Collections
 1. Arrays.copyOf => System.arraycopy => native arraycopy
 2. Arrays.binarySerach 如果是对浮点数进行二分搜索，则需要转换成对应的整型；<= + 1 - 1
 3. Arrays.asList 返回 `Arrays` 的内部类 `ArrayList`
@@ -138,16 +138,16 @@
 	private static final int INDEXOFSUBLIST_THRESHOLD =   35;
 	```
 
-##### ArrayList
+### ArrayList
 动态数组
 
 1. 默认容量 10
 2. 扩容时每次变成 1.5 倍
 
-##### LinkedList 
+### LinkedList 
 双向链表，默认容量 0
 
-##### HashMap
+### HashMap
 主要使用了 数组 + 单向链表 + 红黑树的方式实现  
 
 1. 成员变量
@@ -179,13 +179,13 @@
 		4. 数组的初始化会延迟到第一个元素到来时执行  
 	- `puzzle` HashMap(1000) 会怎样？ 1024 * 0.75 < 1000
 
-##### HashTable
+### HashTable
 1. HashTable 不能接受为 null 的键或值   
 2. HashTable 每个方法都被 Synchronized 修饰了  
 3. HashMap 是 fail-fast 的，当有其他线程（或使用错误的API） 改变了HashMap的结构时，将会抛出 ConcurrentModificationException，HashTable 的 enumerator 的迭代器不是 fail-fast 的。  
 4. 默认大小是 11
 
-##### LinkedHashMap
+### LinkedHashMap
 1. 继承自 HashMap，实现了 Map 接口
 2. 在 HashMap 的基础上加上了双向链表
 3. LRU linkNodeLast accessNode 
@@ -248,12 +248,12 @@
 	}
 	```
 
-##### ConcurrentHashMap
+### ConcurrentHashMap
 1. 默认容量 16 成员变量基本与 HashMap 相同，但没有继承 HashMap
 2. ConcurrentHashMap 不能插入 null 键或者 null 值
 3. 1.7 中使用 segments extends ReentrantLock 分段锁
 4. 在 1.7 中也会用到 CAS 对一些写采用原子方式，写操作需要获取锁，不能并行，读操作可以并行，写的同时也可以读，使得其并行度高于同步容器
-4. 1.8 中使用 CAS，和少量 Synchronized 在 put 操作时锁链表
+4. 1.7 中使用 CAS，和少量 Synchronized 在 put 操作时锁链表
 5. 1.8 中得到容器的容量是大致的近似值
 6. 1.7 中得到容器的容量会在两次失败（modCount 数不一致）后锁住整个表
 7. 1.8 中 resize 时会调动所有线程帮助一起 resize，如果一个线程正在处理一个链表，则将该数组位置设置为 ForwardingNode 下一个线程看到它时自动跳到数组下一个下标处。
